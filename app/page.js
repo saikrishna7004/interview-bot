@@ -1,14 +1,27 @@
-'use client';
+import Head from 'next/head';
+import Link from 'next/link';
 
-import InterviewBot from '../components/InterviewBot';
-
-export default function Home() {
-  return (
-    <main>
-      <div className="container">
-        <h2 className='text-center my-4'>Interview Bot</h2>
-        <InterviewBot />
-      </div>
-    </main>
-  );
+function HomePage() {
+    return (
+        <div>
+            <Head>
+                <title>Interview Bot - Home</title>
+            </Head>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-md-6 text-center mt-4">
+                        <h1 className='my-4'>Welcome to Interview Bot!</h1>
+                        <p className='my-4'>Get ready to ace your next interview!</p>
+                        <Link href="/interview">
+                            <button className="btn btn-primary btn-lg">
+                                Get an Interview
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
+
+export default HomePage;
