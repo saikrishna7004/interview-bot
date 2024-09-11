@@ -104,12 +104,12 @@ const InterviewBot = () => {
                         let text = data
                         console.log(text)
 
+                        text = JSON.parse(text)[0].parts[0].text;
+                        console.log(text)
+                        
                         if (text.startsWith('```json')) {
                             text = text.slice(6, -3).trim();
                         }
-                        console.log(text)
-
-                        text = JSON.parse(text)[0].parts[0].text;
                         text = JSON.parse(text)
                         console.log(text)
 
