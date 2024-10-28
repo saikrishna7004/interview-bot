@@ -259,7 +259,7 @@ const InterviewBot = () => {
                                     </div>
                                 </div>
                             )}
-                            <div className='me-4'>
+                            <div className='self-center me-4'>
                                 {!sending && <div className='flex text-center'>
                                     {!recognitionActive && <button className={`bg-blue-500 text-white py-2 px-4 rounded my-3`} onClick={startListening}>
                                         <FaMicrophone />
@@ -271,7 +271,7 @@ const InterviewBot = () => {
                                     )}
                                 </div>}
                             </div>
-                            {!sending && <div className="flex items-center me-4">
+                            {!sending && <div className="flex self-center me-4">
                                 <input
                                     type="checkbox"
                                     checked={conclude}

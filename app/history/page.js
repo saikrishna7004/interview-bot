@@ -37,7 +37,14 @@ export default function MockInterviewHistory() {
                     <tbody>
                         {mockInterviews.map((interview) => (
                             <tr key={interview._id} className="border-b">
-                                <td className="py-3 px-5">{new Date(interview.createdAt).toLocaleDateString()}</td>
+                                <td className="py-3 px-5">{new Date(interview.createdAt).toLocaleString('en-US', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit',
+                                })}</td>
                                 <td className="py-3 px-5">{interview.topic}</td>
                                 <td className="py-3 px-5">
                                     <Link href={`/history/${interview._id}`} className="text-blue-600 hover:underline">
