@@ -42,6 +42,25 @@ const InterviewBot = () => {
     }, []);
 
     useEffect(() => {
+        if (feedback) {
+            fetch('/api/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic,
+                    jobDescription,
+                    conversation,
+                    feedback
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Interview saved:', data))
+            .catch(error => console.error('Error saving interview:', error));
+        }
+    }, [feedback]);
+    
+
+    useEffect(() => {
         return () => {
             if (audioStream) {
                 audioStream.getTracks().forEach(track => track.stop());
@@ -91,6 +110,7 @@ const InterviewBot = () => {
             askQuestion();
         }
         if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
+        console.log(conversation)
     }, [conversation, started]);
 
     const askQuestion = () => {
@@ -108,7 +128,7 @@ const InterviewBot = () => {
             })
             .catch(error => console.error('Error:', error))
             .finally(() => {
-                interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
+                if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
                 setSending(false);
             });
     };
@@ -148,7 +168,7 @@ const InterviewBot = () => {
 
                         setFeedback(text);
                         setStarted(false);
-                        setConversation([{ role: 'user', parts: [{ text: prompt }] }]);
+                        // setConversation([{ role: 'user', parts: [{ text: prompt }] }]);
                         setMsgs([]);
                         setUserResponse('');
                     })
@@ -188,7 +208,7 @@ const InterviewBot = () => {
     };
 
     return (
-        <div className='mx-4'>
+        <div className='mx-4 pb-4'>
             {showForm && (
                 <div className="container">
                     <h2 className="text-2xl font-bold mb-4">Interview Bot Preferences</h2>
@@ -197,7 +217,7 @@ const InterviewBot = () => {
                             <h2 className="text-xl font-bold mb-2">Enter Topic</h2>
                             <input
                                 type="text"
-                                className="form-input border rounded py-2 px-4 my-2 w-full"
+                                className="form-input bg-white border rounded py-2 px-4 my-2 w-full"
                                 value={topic}
                                 placeholder="Interview Topic"
                                 onChange={e => setTopic(e.target.value)}
@@ -206,7 +226,7 @@ const InterviewBot = () => {
                         <div className="my-4">
                             <h2 className="text-xl font-bold mb-2">Job Description</h2>
                             <textarea
-                                className="form-input border rounded py-2 px-4 my-2 w-full"
+                                className="form-input bg-white border rounded py-2 px-4 my-2 w-full"
                                 value={jobDescription}
                                 placeholder="Job Description"
                                 onChange={e => setJobDescription(e.target.value)}
@@ -218,8 +238,8 @@ const InterviewBot = () => {
             )}
 
             {!feedback && !showForm && (
-                <div className="">
-                    <div className="flex flex-col overflow-y-auto h-[75vh]" ref={interviewResultRef}>
+                <div className="py-4">
+                    <div className="flex flex-col overflow-y-auto h-[68vh]" ref={interviewResultRef}>
                         {msgs.map((item, index) => (
                             <div key={index} className={`my-2 ${item.role === 'user' ? 'self-end' : 'self-start'} max-w-[70%]`}>
                                 <div className={`message p-3 ${item.role === 'user' ? 'bg-blue-500 text-white rounded-t-lg rounded-l-lg rounded-r-lg' : 'bg-gray-300 rounded-t-lg rounded-l-lg rounded-r-lg'}`}>
@@ -277,7 +297,7 @@ const InterviewBot = () => {
             )}
 
             {feedback && (
-                <div className="my-4">
+                <div className="pb-4">
                     <h3 className="text-lg font-bold my-6">Interview Feedback:</h3>
                     <Link className="flex items-center mb-4" href='/'><FaArrowLeft />&nbsp;Back</Link>
                     <div className="overflow-auto">

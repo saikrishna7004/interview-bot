@@ -61,7 +61,7 @@ export default function App() {
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">{session.user.email}</p>
 							</DropdownItem>
-							{session?.user?.role == "admin" && <DropdownItem href="/councelling" key="admin" as={Link}>Councelling</DropdownItem>}
+							{/* {session?.user?.role == "admin" && <DropdownItem href="/councelling" key="admin" as={Link}>Councelling</DropdownItem>} */}
 							<DropdownItem onClick={async (e) => {
 								e.preventDefault()
 								await signOut({ redirect: false })

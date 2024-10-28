@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
+const { nextui } = require('@nextui-org/react');
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -15,5 +17,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  defaultTheme: "light",
+  plugins: [nextui(), require('@tailwindcss/typography')],
 };

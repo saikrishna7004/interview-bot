@@ -9,7 +9,7 @@ export function Providers({ children }) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider attribute="class" >
+      <NextThemesProvider>
         {children}
         <ProgressBar
           height="2px"
