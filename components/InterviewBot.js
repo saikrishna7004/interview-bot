@@ -53,12 +53,12 @@ const InterviewBot = () => {
                     feedback
                 })
             })
-            .then(response => response.json())
-            .then(data => console.log('Interview saved:', data))
-            .catch(error => console.error('Error saving interview:', error));
+                .then(response => response.json())
+                .then(data => console.log('Interview saved:', data))
+                .catch(error => console.error('Error saving interview:', error));
         }
     }, [feedback]);
-    
+
 
     useEffect(() => {
         return () => {
@@ -210,11 +210,11 @@ const InterviewBot = () => {
     return (
         <div className='mx-4 pb-4'>
             {showForm && (
-                <div className="container">
-                    <h2 className="text-2xl font-bold mb-4">Interview Bot Preferences</h2>
+                <div className="container min-h-[60vh]">
+                    <h2 className="text-xl font-bold mb-4">Interview Bot Preferences</h2>
                     <div className="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div className="my-4">
-                            <h2 className="text-xl font-bold mb-2">Enter Topic</h2>
+                            <h2 className="mb-2">Enter Topic</h2>
                             <input
                                 type="text"
                                 className="form-input bg-white border rounded py-2 px-4 my-2 w-full"
@@ -224,15 +224,17 @@ const InterviewBot = () => {
                             />
                         </div>
                         <div className="my-4">
-                            <h2 className="text-xl font-bold mb-2">Job Description</h2>
+                            <h2 className="mb-2">Job Description</h2>
                             <textarea
                                 className="form-input bg-white border rounded py-2 px-4 my-2 w-full"
                                 value={jobDescription}
                                 placeholder="Job Description"
                                 onChange={e => setJobDescription(e.target.value)}
                             />
-                            <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2" onClick={handleStartInterview}>Start Interview</button>
                         </div>
+                    </div>
+                    <div className="text-center">
+                        <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2" onClick={handleStartInterview}>Start Interview</button>
                     </div>
                 </div>
             )}

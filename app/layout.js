@@ -4,6 +4,7 @@ import SessionProvider from "@/components/SessionProvider";
 import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Interview Bot",
@@ -20,6 +21,7 @@ export default async function RootLayout({ children }) {
           <Providers>
             <Navbar />
             {children}
+            <Footer />
             <ToastContainer />
           </Providers>
         </SessionProvider>
