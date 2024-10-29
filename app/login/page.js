@@ -16,7 +16,7 @@ const Login = () => {
     const next = nextParam || '/';
 
     useEffect(() => {
-        console.log(next)
+        console.log(next, session)
         if (session) {
             router.push(next || '/');
         }

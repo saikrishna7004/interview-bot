@@ -23,21 +23,16 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'editor', 'mentor', 'writer', 'traineeDev', 'seniorDev', 'subscriber', 'guestAuthor'],
+        enum: ['admin', 'user'],
         default: 'subscriber'
     },
-    picture: {
+    image: {
         type: String
     },
-    hobbies: {
+    googleAccessToken: {
         type: String
     },
-    status: {
-        type: String,
-        enum: ['working', 'studying', 'others'],
-        required: true
-    },
-    focus: {
+    googleRefreshToken: {
         type: String
     }
 });

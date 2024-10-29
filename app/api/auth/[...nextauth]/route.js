@@ -60,6 +60,7 @@ export const authOptions = {
                 token.username = user.username;
                 token.email = user.email;
                 token.role = user.role;
+                token.image = user.image;
                 if (account?.provider === 'google') {
                     token.googleAccessToken = account.access_token;
                     token.googleRefreshToken = account.refresh_token;
@@ -72,7 +73,7 @@ export const authOptions = {
             session.user.username = token.username;
             session.user.email = token.email;
             session.user.role = token.role;
-            session.user.picture = token.image || token.picture;
+            session.user.image = token.image;
             if (token.googleAccessToken) {
                 session.googleAccessToken = token.googleAccessToken;
             }
