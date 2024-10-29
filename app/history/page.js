@@ -29,7 +29,7 @@ export default function MockInterviewHistory() {
     }
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="container mx-auto p-6 min-h-[70vh]">
             <h1 className="text-2xl font-bold mb-4">Mock Interview History</h1>
             {loading ? (
                 <div

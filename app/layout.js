@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: "Interview Bot",
-  description: "An automated bot, based on Gemini API to simulate an interview.",
+  description: "An automated bot, to simulate an interview.",
 };
 
 export default async function RootLayout({ children }) {
