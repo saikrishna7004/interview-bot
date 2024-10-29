@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaArrowLeft, FaMicrophone, FaStop } from 'react-icons/fa';
+import { FaArrowLeft, FaCheck, FaMicrophone, FaStop } from 'react-icons/fa';
+import { FiRefreshCcw } from "react-icons/fi";
 import { LiveAudioVisualizer } from 'react-audio-visualize';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -21,6 +22,9 @@ const InterviewBot = () => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioStream, setAudioStream] = useState(null);
     const [conclude, setConclude] = useState(false);
+
+    const [recorded, setRecorded] = useState(false)
+    const [confirm, setConfirm] = useState(false)
 
     const [resumeText, setResumeText] = useState('');
     const [loading, setLoading] = useState(false);
@@ -241,6 +245,7 @@ const InterviewBot = () => {
 
     const startListening = async () => {
         if (recognition) {
+            setRecorded(false)
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const recorder = new MediaRecorder(stream);
             setAudioStream(stream);
@@ -258,8 +263,8 @@ const InterviewBot = () => {
             setAudioStream(null);
             if (mediaRecorder) {
                 mediaRecorder.stop();
-                handleUserResponse(conclude);
             }
+            setRecorded(true)
         }
     };
 
@@ -338,6 +343,19 @@ const InterviewBot = () => {
                                 </div>
                             </div>
                         ))}
+                        {recorded && <div className='my-2 self-end max-w-[70%]'>
+                            <div className='message p-3 bg-blue-500 text-white rounded-t-lg rounded-l-lg rounded-r-lg'>
+                                <p>{userResponse}</p>
+                            </div>
+                            {recorded && <div className="content-center">
+                                <button onClick={() => { setRecorded(false); handleUserResponse(conclude); }} className="ml-2" aria-label='Ok'>
+                                    <FaCheck />
+                                </button>
+                                <button onClick={() => { setUserResponse(''); startListening(); }} className="ml-4" aria-label='Re take'>
+                                    <FiRefreshCcw />
+                                </button>
+                            </div>}
+                        </div>}
                     </div>
                     {started && (
                         <div className='flex flex-row my-4 align-center'>
@@ -360,6 +378,9 @@ const InterviewBot = () => {
                                             <FaStop />
                                         </button>
                                     )}
+                                </div>}
+                                {recorded && <div className="flex items-center">
+
                                 </div>}
                             </div>
                             {!sending && <div className="flex self-center me-4">
@@ -385,35 +406,38 @@ const InterviewBot = () => {
                         <button className={`bg-blue-500 text-white py-2 px-4 rounded my-3 ${started ? 'hidden' : ''}`} onClick={handleStartInterview}>Start Interview</button>
                     </div>
                 </div>
-            )}
+            )
+            }
 
-            {feedback && (
-                <div className="pb-4">
-                    <h3 className="text-lg font-bold my-6">Interview Feedback:</h3>
-                    <Link className="flex items-center mb-4" href='/'><FaArrowLeft />&nbsp;Back</Link>
-                    <div className="overflow-auto">
-                        <table className="min-w-full bg-gray-200">
-                            <thead>
-                                <tr>
-                                    <th className="py-2 px-4">Question</th>
-                                    <th className="py-2 px-4">Score</th>
-                                    <th className="py-2 px-4">Feedback</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {feedback.map((item, index) => (
-                                    <tr key={index} className="border-gray-700">
-                                        <td className="py-2 px-4">{item.question ? item.question : <strong>{item.overall}</strong>}</td>
-                                        <td className="py-2 px-4">{item.score}</td>
-                                        <td className="py-2 px-4">{item.feedback}</td>
+            {
+                feedback && (
+                    <div className="pb-4">
+                        <h3 className="text-lg font-bold my-6">Interview Feedback:</h3>
+                        <Link className="flex items-center mb-4" href='/'><FaArrowLeft />&nbsp;Back</Link>
+                        <div className="overflow-auto">
+                            <table className="min-w-full bg-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th className="py-2 px-4">Question</th>
+                                        <th className="py-2 px-4">Score</th>
+                                        <th className="py-2 px-4">Feedback</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {feedback.map((item, index) => (
+                                        <tr key={index} className="border-gray-700">
+                                            <td className="py-2 px-4">{item.question ? item.question : <strong>{item.overall}</strong>}</td>
+                                            <td className="py-2 px-4">{item.score}</td>
+                                            <td className="py-2 px-4">{item.feedback}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
