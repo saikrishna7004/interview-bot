@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaArrowLeft, FaMicrophone, FaStop } from 'react-icons/fa';
 import { LiveAudioVisualizer } from 'react-audio-visualize';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 const InterviewBot = () => {
     const [topic, setTopic] = useState('React, Java');
@@ -20,6 +21,54 @@ const InterviewBot = () => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioStream, setAudioStream] = useState(null);
     const [conclude, setConclude] = useState(false);
+
+    const [resumeText, setResumeText] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const { data: session, status } = useSession();
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === 'application/pdf') {
+            setLoading(true);
+            setResumeText('');
+            setError(null);
+
+            try {
+                const base64File = await fileToBase64(file);
+                const response = await fetch('/api/parse', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ file: base64File }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    setResumeText(result?.text?.trim());
+                } else {
+                    setError(result.error || 'Failed to extract text');
+                }
+            } catch (err) {
+                setError('An error occurred. Please try again.');
+            } finally {
+                setLoading(false); // Stop loading
+            }
+        } else {
+            setError('Please upload a valid PDF file.');
+        }
+    };
+
+    const fileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = (error) => reject(error);
+        });
+    };
 
     useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -49,8 +98,10 @@ const InterviewBot = () => {
                 body: JSON.stringify({
                     topic,
                     jobDescription,
+                    resumeText,
                     conversation,
-                    feedback
+                    feedback,
+                    username: session?.user?.username || 'guest'
                 })
             })
                 .then(response => response.json())
@@ -76,6 +127,11 @@ const InterviewBot = () => {
             SKILLS REQUIRED That are mentioned in the Job Description (For which he needs a mock interview related to): 
             """${jobDescription}"""
 
+            The candidate has provided the following resume details (Based on which you need to ask questions, this is IMPORTANT): 
+            """${resumeText}"""
+
+            -------
+            
             Ask the TECHNICAL QUESTIONS first, then go to check his personal skills.
             Ask his name and basic info like what he knows first, and ask questions accordingly. Call him with name.
             Remember, the interview should not be too deep and should be easily answerable by a general student. 
@@ -232,6 +288,39 @@ const InterviewBot = () => {
                                 onChange={e => setJobDescription(e.target.value)}
                             />
                         </div>
+                        <div className="my-4">
+                            <h2 className="mb-2">Upload Resume (PDF)</h2>
+                            <input
+                                type="file"
+                                accept=".pdf"
+                                className="form-input bg-white border rounded py-2 px-4 my-2 w-full"
+                                onChange={handleFileChange}
+                            />
+                            {loading ? <label htmlFor="resume-upload" className="px-4 py-2">
+                                Processing...
+                            </label> : ''}
+                        </div>
+                        {loading && (
+                            <div className="flex justify-center my-4">
+                                <div
+                                    className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                                    role="status">
+                                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Extracting Text...</span>
+                                </div>
+                                <span className="ml-2">Extracting text...</span>
+                            </div>
+                        )}
+
+                        {error && (
+                            <p className="text-red-500 text-center mt-4">{error}</p>
+                        )}
+
+                        {resumeText && !loading && (
+                            <div className="my-4">
+                                <h2 className="mb-2">Resume Transcript</h2>
+                                <textarea disabled className="form-input bg-white border rounded py-2 px-4 my-2 w-full">{resumeText}</textarea >
+                            </div>
+                        )}
                     </div>
                     <div className="text-center">
                         <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2" onClick={handleStartInterview}>Start Interview</button>

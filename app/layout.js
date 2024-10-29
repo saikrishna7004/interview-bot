@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: "Interview Bot",

@@ -4,7 +4,8 @@ const interviewSchema = new Schema({
     topic: String,
     jobDescription: String,
     conversation: Array,
-    feedback: Array
+    feedback: Array,
+    username: String
 }, {
     timestamps: true
 });
