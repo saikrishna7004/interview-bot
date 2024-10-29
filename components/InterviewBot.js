@@ -169,13 +169,14 @@ const InterviewBot = () => {
         if (started && conversation?.length > 0 && conversation[conversation.length - 1].role === 'user') {
             askQuestion();
         }
-        if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
-        console.log(conversation)
     }, [conversation, started]);
 
+    useEffect(() => {
+        if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
+    }, [conversation, recorded, started])
+    
     const askQuestion = () => {
         setSending(true);
-        interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
         fetch('/api/interview', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -188,7 +189,6 @@ const InterviewBot = () => {
             })
             .catch(error => console.error('Error:', error))
             .finally(() => {
-                if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
                 setSending(false);
             });
     };
@@ -200,7 +200,6 @@ const InterviewBot = () => {
             setUserResponse('');
             if (stop) {
                 setSending(true);
-                interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
                 fetch('/api/interview', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -234,7 +233,6 @@ const InterviewBot = () => {
                     })
                     .catch(error => console.error('Error:', error))
                     .finally(() => {
-                        interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
                         setSending(false);
                     });;
             } else {
@@ -264,7 +262,7 @@ const InterviewBot = () => {
             if (mediaRecorder) {
                 mediaRecorder.stop();
             }
-            setRecorded(true)
+            setRecorded(true);
         }
     };
 
