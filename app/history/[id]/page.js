@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 
@@ -42,41 +41,48 @@ export default function InterviewDetails({ params }) {
                     <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
                 </div>
             ) : error ? (
-                <div>Error: {error}</div>
+                <div className="bg-red-100 text-red-800 p-4 rounded-md">{`Error: ${error}`}</div>
             ) : !interview ? (
-                <div>No interview found.</div>
+                <div className="bg-yellow-100 text-yellow-800 p-4 rounded-md">No interview found.</div>
             ) : (
                 <>
-                    <h1 className="text-2xl font-bold mb-4">Interview Details</h1>
-                    <Link className="flex items-center mb-4" href='/history'><FaArrowLeft />&nbsp;Back</Link>
-                    <div className="mb-4">
-                        <h2 className="text-xl font-semibold">Topic: {interview.topic}</h2>
+                    <h1 className="text-3xl font-bold mb-6">Interview Details</h1>
+                    <Link className="flex items-center mb-4 text-blue-600 hover:underline" href='/history'>
+                        <FaArrowLeft className="mr-2" /> Back
+                    </Link>
+                    <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
+                        <h2 className="text-2xl font-semibold mb-2">Topic: {interview.topic}</h2>
                         <p className="text-gray-600">Date: {new Date(interview.createdAt).toLocaleDateString()}</p>
                     </div>
-                    <div className="mb-4">
-                        <h3 className="text-lg font-semibold">Job Description:</h3>
-                        <p>{interview.jobDescription}</p>
+                    <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-2">Job Description:</h3>
+                        <p className="text-gray-700">{interview.jobDescription}</p>
                     </div>
-                    <div className="mb-4">
-                        <h3 className="text-lg font-semibold">Feedback:</h3>
-                        {interview.feedback.map((fb, index) => (
-                            <div key={index}>
-                                <p><strong>Question:</strong> {fb.question}</p>
-                                <p><strong>Feedback:</strong> {fb.feedback}</p>
-                                <p><strong>Score:</strong> {fb.score}</p>
+                    <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-2">Feedback:</h3>
+                        {interview.feedback.filter(fb => !fb.overall).map((fb, index) => (
+                            <div key={index} className="border-b border-gray-300 py-6 last:border-b-0">
+                                <p className="font-medium text-green-700"><strong>Question:</strong> {fb.question}</p>
+                                <p className="text-gray-700"><strong>Feedback:</strong> {fb.feedback}</p>
+                                <p className="text-blue-500"><strong>Score:</strong> {fb.score}</p>
                             </div>
                         ))}
-                        <p><strong>Overall Feedback:</strong> {interview.feedback.find(f => f.overall)?.feedback}</p>
+                        {interview.feedback.find(f => f.overall) && (
+                            <p className="mt-4">
+                                <strong>Overall Feedback:</strong> {interview.feedback.find(f => f.overall)?.feedback} <br />
+                                <strong>Score:</strong> {interview.feedback.find(f => f.overall)?.score}
+                            </p>
+                        )}
                     </div>
-                    <div className="mb-4">
-                        <h3 className="text-lg font-semibold">Conversation:</h3>
+                    <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-6">Conversation:</h3>
                         {interview.conversation.map((conv, index) => {
-                            if (index == 0) return;
+                            if (index === 0) return null;
                             return conv.parts.map((part, partIndex) => (
-                                <p key={`${index}-${partIndex}`} className="mb-2">
-                                    <b style={{ textTransform: 'capitalize' }}>{conv.role}: </b>&nbsp;{getFilteredConversation(part.text)}
+                                <p key={`${index}-${partIndex}`} className="mb-4">
+                                    <strong className="capitalize">{conv.role}:</strong> {getFilteredConversation(part.text)}
                                 </p>
-                            ))
+                            ));
                         })}
                     </div>
                 </>

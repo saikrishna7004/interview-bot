@@ -13,18 +13,23 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
+        required: function () {
+            return !this.googleAccessToken;
+        }
+    },
+    name: {
+        type: String,
         required: true
-    },
-    firstname: {
-        type: String
-    },
-    lastname: {
-        type: String
     },
     role: {
         type: String,
         enum: ['admin', 'user'],
-        default: 'subscriber'
+        default: 'user'
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
     },
     image: {
         type: String

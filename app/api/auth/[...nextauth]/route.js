@@ -33,7 +33,7 @@ export const authOptions = {
                     prompt: 'consent',
                     access_type: 'offline',
                     response_type: 'code',
-                    scope: 'openid email profile https://www.googleapis.com/auth/calendar'
+                    // scope: 'openid email profile https://www.googleapis.com/auth/calendar'
                 }
             },
             async profile(profile) {
@@ -55,7 +55,51 @@ export const authOptions = {
     secret: process.env.JWT_SECRET,
     callbacks: {
         async jwt({ token, user, account }) {
-            if (user) {
+            await connectMongo();
+
+            if (account?.provider === 'google') {
+                let existingUser = await User.findOne({ email: token.email });
+
+                if (!existingUser) {
+                    let baseUsername = token.name.split(' ').join('').toLowerCase();
+                    let uniqueUsername = baseUsername;
+                    let usernameExists = await User.findOne({ username: uniqueUsername });
+                    
+                    if (usernameExists) {
+                        const emailPrefix = token.email.split('@')[0];
+                        uniqueUsername = emailPrefix;
+                    }
+
+                    existingUser = await User.create({
+                        username: uniqueUsername,
+                        email: token.email,
+                        name: token.name,
+                        role: 'user',
+                        image: token.picture,
+                        googleAccessToken: account.access_token,
+                        googleRefreshToken: account.refresh_token,
+                        status: 'active'
+                    });
+
+                    token._id = existingUser._id;
+                    token.username = existingUser.username;
+                    token.email = existingUser.email;
+                    token.role = existingUser.role;
+                    token.image = existingUser.image;
+                    token.googleAccessToken = account.access_token;
+                    token.googleRefreshToken = account.refresh_token;
+                } else {
+                    token._id = existingUser._id;
+                    token.username = existingUser.username;
+                    token.email = existingUser.email;
+                    token.role = existingUser.role;
+                    token.image = existingUser.image;
+                    token.googleAccessToken = account.access_token;
+                    token.googleRefreshToken = account.refresh_token;
+                }
+            }
+
+            else if (user) {
                 token._id = user._id;
                 token.username = user.username;
                 token.email = user.email;
@@ -66,14 +110,20 @@ export const authOptions = {
                     token.googleRefreshToken = account.refresh_token;
                 }
             }
+            console.log(token)
             return token;
         },
         async session({ session, token }) {
-            session.user._id = token._id;
-            session.user.username = token.username;
-            session.user.email = token.email;
-            session.user.role = token.role;
-            session.user.image = token.image;
+            await connectMongo();
+            const dbUser = await User.findById(token._id);
+
+            session.user._id = dbUser._id;
+            session.user.username = dbUser.username;
+            session.user.email = dbUser.email;
+            session.user.role = dbUser.role;
+            session.user.image = dbUser.image;
+            session.user.name = dbUser.name;
+
             if (token.googleAccessToken) {
                 session.googleAccessToken = token.googleAccessToken;
             }

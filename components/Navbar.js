@@ -51,13 +51,13 @@ export default function App() {
 							color="secondary"
 							name="User Avatar"
 							size="md"
-							src={session?.user?.picture || "https://i.pravatar.cc/150?u=a042581f4e29026704d"}
+							src={session?.user?.image || "https://i.pravatar.cc/150?u=a042581f4e29026704d"}
 						/>
 					</DropdownTrigger>
 
 					{
 						session?.user ? <DropdownMenu className="text-dark" aria-label="Profile Actions" variant="flat">
-							<DropdownItem href={"/author/" + session.user.username} key="profile" className="h-14 gap-2" as={Link}>
+							<DropdownItem href={"/user/" + session.user.username} key="profile" className="h-14 gap-2" as={Link}>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">{session.user.email}</p>
 							</DropdownItem>

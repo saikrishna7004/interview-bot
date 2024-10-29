@@ -19,7 +19,7 @@ export default function Home() {
             <div className="container mx-auto px-4">
                 <div className="w-[500px] mx-auto">
                     <div className="block p-4 bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-transform duration-300 flex flex-col items-center">
-                        <Image className='my-3' src={'https://happsales.com/wp-content/uploads/2023/09/Contact-Intelligences-300x300.png.webp'} width={300} height={300} />
+                        <Image alt='Get Interview' className='my-3' src={'https://happsales.com/wp-content/uploads/2023/09/Contact-Intelligences-300x300.png.webp'} width={300} height={300} />
                         <h2 className="text-3xl font-bold text-blue-700 mt-4 transition-colors">
                             Get an Interview
                         </h2>
