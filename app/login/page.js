@@ -57,7 +57,7 @@ const Login = () => {
                     <div className="flex items-center w-full max-w-md px-6 py-16 mx-auto lg:w-2/4">
                         <div className="flex-1">
                             <div className="text-center">
-                                <h2 className="text-4xl font-bold text-center text-zinc-700">Inbot</h2>
+                                <h2 className="text-4xl font-bold text-center text-zinc-700">MockMate</h2>
                                 <p className="mt-3 text-zinc-500">Sign in to access your account</p>
                             </div>
                             <div className="mt-8">

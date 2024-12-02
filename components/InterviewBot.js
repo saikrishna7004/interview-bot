@@ -124,7 +124,7 @@ const InterviewBot = () => {
     }, [audioStream]);
 
     const handleStartInterview = () => {
-        const prompt = `Imagine you are the interviewer named "Inbot" for a college student. 
+        const prompt = `Imagine you are the interviewer named "MockMate" for a college student. 
 
             You need to assess him like a professional entry level interview related to ${topic} (which is chosen by him). 
 

@@ -6,7 +6,7 @@ export default function Home() {
         <div className="min-h-screen py-8">
             <div className="text-center mb-16">
                 <h1 className="text-7xl font-bold bg-gradient-to-r from-blue-600 via-green-500 to-teal-400 bg-clip-text text-transparent my-4 drop-shadow-lg">
-                    Inbot
+                    MockMate
                 </h1>
                 <p className="text-2xl text-gray-800 mb-4 font-medium">
                     Prepare for Your Career
