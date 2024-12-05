@@ -57,7 +57,7 @@ export default function App() {
 
 					{
 						session?.user ? <DropdownMenu className="text-dark" aria-label="Profile Actions" variant="flat">
-							<DropdownItem href={"/user/" + session.user.username} key="profile" className="h-14 gap-2" as={Link}>
+							<DropdownItem href={"/user"} key="profile" className="h-14 gap-2" as={Link}>
 								<p className="font-semibold">Signed in as</p>
 								<p className="font-semibold">{session.user.email}</p>
 							</DropdownItem>

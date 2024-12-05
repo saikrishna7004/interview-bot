@@ -1,4 +1,4 @@
-import connectMongo from "@/utils/connectMongo";
+import connectMongo from "@/utils/connectMongo"; 
 import User from "@/models/User";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -59,6 +59,7 @@ export const authOptions = {
 
             if (account?.provider === 'google') {
                 let existingUser = await User.findOne({ email: token.email });
+                console.log(existingUser)
 
                 if (!existingUser) {
                     let baseUsername = token.name.split(' ').join('').toLowerCase();
@@ -88,6 +89,9 @@ export const authOptions = {
                     token.image = existingUser.image;
                     token.googleAccessToken = account.access_token;
                     token.googleRefreshToken = account.refresh_token;
+                    token.preferredTopics = existingUser.preferredTopics || '';
+                    token.jobDescription = existingUser.jobDescription || '';
+                    token.resumeText = existingUser.resumeText || ''; 
                 } else {
                     token._id = existingUser._id;
                     token.username = existingUser.username;
@@ -96,6 +100,9 @@ export const authOptions = {
                     token.image = existingUser.image;
                     token.googleAccessToken = account.access_token;
                     token.googleRefreshToken = account.refresh_token;
+                    token.preferredTopics = existingUser.preferredTopics || '';
+                    token.jobDescription = existingUser.jobDescription || '';
+                    token.resumeText = existingUser.resumeText || ''; 
                 }
             }
 
@@ -109,8 +116,13 @@ export const authOptions = {
                     token.googleAccessToken = account.access_token;
                     token.googleRefreshToken = account.refresh_token;
                 }
+                
+                token.preferredTopics = user.preferredTopics || '';
+                token.jobDescription = user.jobDescription || '';
+                token.resumeText = user.resumeText || ''; 
             }
-            console.log(token)
+
+            console.log(token);
             return token;
         },
         async session({ session, token }) {
@@ -123,6 +135,10 @@ export const authOptions = {
             session.user.role = dbUser.role;
             session.user.image = dbUser.image;
             session.user.name = dbUser.name;
+
+            session.user.preferredTopics = dbUser.preferredTopics || '';
+            session.user.jobDescription = dbUser.jobDescription || '';
+            session.user.resumeText = dbUser.resumeText || '';
 
             if (token.googleAccessToken) {
                 session.googleAccessToken = token.googleAccessToken;

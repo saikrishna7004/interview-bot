@@ -39,6 +39,16 @@ const userSchema = new Schema({
     },
     googleRefreshToken: {
         type: String
+    },
+    preferredTopics: {
+        type: String,
+        default: []
+    },
+    jobDescription: {
+        type: String
+    },
+    resumeText: {
+        type: String
     }
 });
 

@@ -5,9 +5,9 @@ import { LiveAudioVisualizer } from 'react-audio-visualize';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
-const InterviewBot = () => {
-    const [topic, setTopic] = useState('React, Java');
-    const [jobDescription, setJobDescription] = useState('React proficiency, Java OOPs');
+const InterviewBot = ({ userData }) => {
+    const [topic, setTopic] = useState(userData.preferredTopics || 'React, Java');
+    const [jobDescription, setJobDescription] = useState(userData.jobDescription || 'React proficiency, Java OOPs');
     const [showForm, setShowForm] = useState(true);
 
     const [conversation, setConversation] = useState();
@@ -26,7 +26,7 @@ const InterviewBot = () => {
     const [recorded, setRecorded] = useState(false)
     const [confirm, setConfirm] = useState(false)
 
-    const [resumeText, setResumeText] = useState('');
+    const [resumeText, setResumeText] = useState(userData.resumeText || '');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { data: session, status } = useSession();
@@ -174,7 +174,7 @@ const InterviewBot = () => {
     useEffect(() => {
         if (interviewResultRef?.current) interviewResultRef.current.scrollTop = interviewResultRef.current.scrollHeight;
     }, [conversation, recorded, started])
-    
+
     const askQuestion = () => {
         setSending(true);
         fetch('/api/interview', {
