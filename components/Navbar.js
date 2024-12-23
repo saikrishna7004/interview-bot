@@ -7,6 +7,7 @@ import { NavbarItemCustom } from "./NavbarItemCustom";
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { usePathname } from 'next/navigation'
+import Image from "next/image";
 
 export default function App() {
 	const { data: session, status } = useSession()
@@ -45,13 +46,24 @@ export default function App() {
 			<NavbarContent as="div" className="items-center relative" justify="end">
 				<Dropdown placement="bottom-end">
 					<DropdownTrigger>
-						<Avatar
+						{/* <Avatar
 							as="button"
 							className="transition-transform"
 							color="secondary"
 							name="User Avatar"
 							size="md"
 							src={session?.user?.image || "https://i.pravatar.cc/150?u=a042581f4e29026704d"}
+						/> */}
+						<Image
+							as="button"
+							alt="User Avatar"
+							className="transition-transform cursor-pointer rounded-full border-2 border-zinc-500"
+							color="secondary"
+							name="User Avatar"
+							size="md"
+							src={session?.user?.image || "https://media.istockphoto.com/illustrations/blank-man-profile-head-icon-placeholder-illustration-id1298261537?k=20&m=1298261537&s=612x612&w=0&h=8plXnK6Ur3LGqG9s-Xt2ZZfKk6bI0IbzDZrNH9tr9Ok="}
+							width={42}
+							height={42}
 						/>
 					</DropdownTrigger>
 

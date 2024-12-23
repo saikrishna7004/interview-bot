@@ -42,7 +42,7 @@ const userSchema = new Schema({
     },
     preferredTopics: {
         type: String,
-        default: []
+        default: "-"
     },
     jobDescription: {
         type: String

@@ -209,7 +209,7 @@ const InterviewBot = ({ userData }) => {
                             {
                                 role: 'user',
                                 parts: [{
-                                    text: `User Said: "${userResponse}". NOW, THE INTERVIEW IS DONE. Assess the whole interview, conclude it now and then tell the whole score, in a JSON ARRAY ONLY, with the questions, score out of 5 as an integer and feedback as the result. The response from you SHOULD ONLY BE AN ARRAY WITHOUT MARKDOWN, with the format as below: [{\"question\": \"gfhihjg\",\"id\": 1,\"score\": 5,\"feedback\": \"Your response and feedback\"},...{\"overall\": \"Overall feedback\",\"score\": <Overall score out of 5 as a number only>, "feedback": "Overall feedback of the candidate"}. NOTE THAT IT SHOULD BE A VALID JSON WHICH CAN BE PARSED DIRECTLY.}]`
+                                    text: `User Said: "${userResponse}". NOW, THE INTERVIEW IS DONE. Assess the whole interview, conclude it now and then tell the whole score, in a JSON ARRAY ONLY, with the questions, score out of 5 as an integer and feedback as the result. The response from you SHOULD ONLY BE AN ARRAY WITHOUT MARKDOWN, with the format as below: [{\"question\": \"gfhihjg\",\"id\": 1,\"score\": 5,\"feedback\": \"Your response and feedback\"},...{\"overall\": \"Overall feedback\",\"score\": <Overall score out of 5 as a number only>, "feedback": "Overall feedback of the candidate"}. NOTE THAT IT SHOULD BE A VALID JSON WHICH CAN BE PARSED DIRECTLY, NOT as a CODE BLOCK.}]`
                                 }]
                             }
                         ]
@@ -234,7 +234,7 @@ const InterviewBot = ({ userData }) => {
                     .catch(error => console.error('Error:', error))
                     .finally(() => {
                         setSending(false);
-                    });;
+                    });
             } else {
                 setConversation(prev => [...prev, { role: 'user', parts: [{ text: `User Said: \"${userResponse}\". Now, ask the NEXT QUESTION.` }] }]);
             }
