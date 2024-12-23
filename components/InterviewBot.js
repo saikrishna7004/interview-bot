@@ -83,7 +83,11 @@ const InterviewBot = ({ userData }) => {
             rec.lang = 'en-US';
             rec.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
-                setUserResponse(transcript);
+                console.log(event.results)
+                setUserResponse(curr => curr + " " + transcript);
+                if(recognitionActive) {
+                    startListening();
+                }
             };
             rec.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
@@ -219,10 +223,12 @@ const InterviewBot = ({ userData }) => {
                     .then(data => {
                         let text = data;
                         text = JSON.parse(text)[0].parts[0].text;
+                        // console.log(text)
 
                         if (text.startsWith('```json')) {
-                            text = text.slice(6, -3).trim();
+                            text = text.slice(7, -3).trim();
                         }
+                        // console.log(text)
                         text = JSON.parse(text);
 
                         setFeedback(text);
@@ -321,7 +327,7 @@ const InterviewBot = ({ userData }) => {
                         {resumeText && !loading && (
                             <div className="my-4">
                                 <h2 className="mb-2">Resume Transcript</h2>
-                                <textarea disabled className="form-input bg-white border rounded py-2 px-4 my-2 w-full">{resumeText}</textarea >
+                                <textarea disabled className="form-input bg-white border rounded py-2 px-4 my-2 w-full" value={resumeText}></textarea >
                             </div>
                         )}
                     </div>
@@ -353,6 +359,11 @@ const InterviewBot = ({ userData }) => {
                                     <FiRefreshCcw />
                                 </button>
                             </div>}
+                        </div>}
+                        {!recorded && recognitionActive && <div className='my-2 self-end max-w-[70%]'>
+                            <div className="message p-3 bg-blue-500 text-white rounded-t-lg rounded-l-lg rounded-r-lg">
+                                <p>{userResponse}</p>
+                            </div>
                         </div>}
                     </div>
                     {started && (
